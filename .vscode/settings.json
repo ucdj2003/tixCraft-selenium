@@ -1,0 +1,14 @@
+{
+    "python.pythonPath": "D:\\Anaconda\\python.exe",
+    "jshint.options":{
+        "esversion":6
+    },
+    "eslint.options": {
+        "env":{
+            "es6":true
+        },
+        "parserOptions": {
+            "ecmaVersion": 6 // or 7,8,9
+        }
+    }
+}
