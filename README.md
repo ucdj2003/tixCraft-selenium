@@ -24,3 +24,6 @@ python3 tixCraft.py
 5. 輸入你想搶的張數
 6. 輸入你不想搶的價格區域(optional)
 7. 輸入此演唱會的搶票日期，範例格式為 {Y(2020) m(01-12) d(0-31) H(0-23) M(00-59) S(00-59)}
+
+### TODO
+Automated login of "Facebook" and "PixelPin".
