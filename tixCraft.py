@@ -8,22 +8,36 @@ import requests
 import re
 import math
 import random
+import argparse
 from bs4 import BeautifulSoup
 
 DEBUG_MODE = False
 
 url = 'https://tixcraft.com/'
-target_url = 'https://tixcraft.com/activity/game/20_GreenDay'
+# target_url = 'https://tixcraft.com/activity/game/20_GreenDay'
+target_url = input("輸入你想要搶票的演唱會網址，格式為/activity/game/ : ")
+
+
+# TODO: 3 way sign in argparse implement.
+# parser = argparse.ArgumentParser()
+# parser.add_argument("-g", "--google", action="store_true", help="Sign in with Google account")
+# args = parser.parse_args()
+# if args.google:
+#     print("Sign in with Google!")
 
 # Setting your login information.
-USERNAME = 'YOUR_USERNAME'
-PASSWORD = 'YOUR_PASSWORD'
+USERNAME = input("輸入你的Google帳號: ")
+PASSWORD = input("輸入你的Google密碼: ")
 
 # You can modify below variable.
-nYourPrice = 4800
-nYourTickets = 4
-arrSkipedAreas = []
-purchaseTime = "20 Jul 11 11 00 00"
+nYourPrice = int(input("輸入你想搶的票價: "))
+nYourTickets = int(input("輸入你想搶的張數: "))
+# arrSkipedAreas = []
+arrSkipedAreas = input("輸入你不想搶的價格區域(optional): ").split()
+# purchaseTime = "2020 07 11 11 00 00"
+purchaseTime = input("輸入此演唱會的搶票日期，範例格式為 {Y(2020) m(01-12) d(0-31) H(0-23) M(00-59) S(00-59)} : ")
+
+
 
 def google_login(driver):
     time.sleep(1)
@@ -147,7 +161,7 @@ if __name__ == '__main__':
         driver.get(target_url)
     time.sleep(1)
 
-    deadline = time.strptime(purchaseTime, "%y %b %d %H %M %S")
+    deadline = time.strptime(purchaseTime, "%Y %m %d %H %M %S")
     mkt_deadline = time.mktime(deadline)
     waiting_time = math.ceil(mkt_deadline - time.time())
     if waiting_time > 0 and not DEBUG_MODE:
