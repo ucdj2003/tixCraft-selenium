@@ -70,13 +70,14 @@ def input_information():
             continue
 
     # arrSkipedAreas = ["搖滾站區"]
-    arrSkipedAreas = input("輸入你不想搶的區域，沒有可以按Enter跳過(optional): ").split()
+    arrSkipedAreas = input("輸入你不想搶的區域，沒有的話可以按Enter跳過(optional): ").split()
 
     # purchaseTime = "2020 07 11 11 00 00"
     while True:
         try:
-            purchaseTime = input("輸入此演唱會的搶票日期，範例格式為 {Y(2020) m(01-12) d(1-31) H(0-23) M(00-59) S(00-59)} : ")
-            time.strptime(purchaseTime, "%Y %m %d %H %M %S")
+            purchaseTime = input("輸入此演唱會的搶票日期，不需要即可按Enter跳過，範例格式為 {Y(2020) m(01-12) d(1-31) H(0-23) M(00-59) S(00-59)} (optional): ")
+            if purchaseTime:
+                time.strptime(purchaseTime, "%Y %m %d %H %M %S")
             break
         except ValueError:
             print("請重新輸入正確的格式！")
@@ -110,7 +111,7 @@ def google_login(driver, USERNAME, PASSWORD):
     driver.find_element_by_xpath("//input[@name='password']").send_keys(PASSWORD)
     driver.find_element_by_xpath("//div[@id='passwordNext']").click()
 
-def wait_to_deadline(driver, purchaseTime):
+def waiting_for_deadline(driver, purchaseTime):
     deadline = time.strptime(purchaseTime, "%Y %m %d %H %M %S")
     mkt_deadline = time.mktime(deadline)
     waiting_time = math.ceil(mkt_deadline - time.time())
@@ -125,7 +126,7 @@ def click_order(driver):
     )
     driver.find_element_by_xpath("//input[@class='btn btn-next']").click()
 
-def wait_to_verfication(driver):
+def wait_for_verfication(driver):
     # If enter the verfication page (for some Japanese/Korean performance), then should be wait 200 sec.
     js = "if (location.pathname.match('/ticket/verify/')) { document.getElementById('checkCode').focus(); }"
     driver.execute_script(js)
@@ -157,14 +158,8 @@ def select_zone(driver, nYourPrice, nYourTickets, arrSkipedAreas):
     for k in range(len(arrZoneList)):
         iZone = arrZoneList[k]
         domAnchors = soup.select('ul.area-list')[iZone].select('a')
-        # print(domAnchors)
-        pattern = str(nYourPrice)
-        idx = -1
         for i in range(len(domAnchors)):
             isSkiped = False
-            # if None == re.search(pattern, domAnchors[i].text):
-            #     continue
-            idx += 1
             for j in range(len(arrSkipedAreas)):
                 if None != re.search(arrSkipedAreas[j], domAnchors[i].text):
                     isSkiped = True
@@ -173,7 +168,6 @@ def select_zone(driver, nYourPrice, nYourTickets, arrSkipedAreas):
                 continue
 
             arrRemains = re.search('\d+', domAnchors[i].font.text)
-            # print(domAnchors[i].font.text)
             if None == arrRemains:
                 nRemain = 10000
             else:
@@ -188,7 +182,7 @@ def select_zone(driver, nYourPrice, nYourTickets, arrSkipedAreas):
                 arrBestZoneAreas = []
             
             if nMaxRemain == nRemain:
-                arrBestZoneAreas.append(iZone * 1000 + idx)
+                arrBestZoneAreas.append(iZone * 1000 + i)
 
     if 0 == len(arrBestZoneAreas):
         print("這個價位 ({}元) 的票一張不剩囉！檢查一下你輸入的價格吧！".format(nYourPrice))
@@ -198,10 +192,6 @@ def select_zone(driver, nYourPrice, nYourTickets, arrSkipedAreas):
     iLuckyZoneArea = arrBestZoneAreas[math.floor(random.uniform(0, 1) * len(arrBestZoneAreas))]
     iLuckyZone = iLuckyZoneArea // 1000 + 1
     iLuckyArea = iLuckyZoneArea % 1000 + 1
-
-    # print(arrBestZoneAreas)
-    # print(iLuckyZone)
-    # print(iLuckyArea)
 
     WebDriverWait(driver, 10).until(
         expected_conditions.presence_of_element_located(
@@ -246,13 +236,14 @@ if __name__ == '__main__':
         driver.get(TARGET_URL)
     time.sleep(1)
 
-    wait_to_deadline(driver, purchaseTime)
-    time.sleep(1)
+    if purchaseTime:
+        waiting_for_deadline(driver, purchaseTime)
+        time.sleep(1)
 
     click_order(driver)
     time.sleep(1)
 
-    wait_to_verfication(driver)
+    wait_for_verfication(driver)
     time.sleep(1)
 
     # Select zone to captcha input anchor.
