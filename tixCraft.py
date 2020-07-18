@@ -70,12 +70,12 @@ def input_information():
             continue
 
     # arrSkipedAreas = ["搖滾站區"]
-    arrSkipedAreas = input("輸入你不想搶的區域，沒有的話可以按Enter跳過(optional): ").split()
+    arrSkipedAreas = input("輸入你不想搶的區域，沒有的話可以按Enter跳過 (optional): ").split()
 
     # purchaseTime = "2020 07 11 11 00 00"
     while True:
         try:
-            purchaseTime = input("輸入此演唱會的搶票日期，不需要即可按Enter跳過，範例格式為 {Y(2020) m(01-12) d(1-31) H(0-23) M(00-59) S(00-59)} (optional): ")
+            purchaseTime = input("輸入此演唱會的搶票日期，不需要即可按Enter跳過，範例格式為「Y(2020) m(01-12) d(1-31) H(0-23) M(00-59) S(00-59)」 (optional): ")
             if purchaseTime:
                 time.strptime(purchaseTime, "%Y %m %d %H %M %S")
             break
