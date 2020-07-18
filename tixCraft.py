@@ -20,15 +20,15 @@ from bs4 import BeautifulSoup
 
 
 DEBUG_MODE = False
-url = 'https://tixcraft.com/'
+URL = 'https://tixcraft.com/'
 
 
 def input_information():
-    # target_url = 'https://tixcraft.com/activity/game/20_GreenDay'
+    # TARGET_URL = 'https://tixcraft.com/activity/game/20_GreenDay'
     while True:
-        target_url = input("輸入你想要搶票的演唱會網址，格式需為「.../activity/game/...」: ")
+        TARGET_URL = input("輸入你想要搶票的演唱會網址，格式需為「.../activity/game/...」: ")
         pattern = '/activity/game/'
-        if re.search(pattern, target_url):
+        if re.search(pattern, TARGET_URL):
             break
         else:
             print("請重新輸入正確的網址格式，網址需含有「/activity/game/」內容")
@@ -82,7 +82,7 @@ def input_information():
             print("請重新輸入正確的格式！")
             continue
     
-    return target_url, USERNAME, PASSWORD, nYourPrice, nYourTickets, arrSkipedAreas, purchaseTime
+    return TARGET_URL, USERNAME, PASSWORD, nYourPrice, nYourTickets, arrSkipedAreas, purchaseTime
 
 
 def google_login(driver, USERNAME, PASSWORD):
@@ -140,9 +140,9 @@ def select_zone(driver, nYourPrice, nYourTickets, arrSkipedAreas):
     domZonePrices = soup.find_all('div', {'class': 'zone-label'})
     arrZoneList = []
     for i in range(len(domZonePrices)):
-        pattern = str(nYourPrice)
-        nPrice = re.search(pattern, domZonePrices[i].text)
-        if None != nPrice:
+        pattern = '\d+'
+        nPrice = int(re.search(pattern, domZonePrices[i].text).group())
+        if nYourPrice == nPrice:
             arrZoneList.append(i)
     if not len(arrZoneList):
         print("沒有符合你想要的價位 ({}元) 的區域！檢查一下你輸入的價格吧！".format(nYourPrice))
@@ -221,15 +221,15 @@ def purchase_ticket(driver):
 if __name__ == '__main__':
     # options = webdriver.ChromeOptions()
     # options.add_argument('--headless')
-    target_url, USERNAME, PASSWORD, nYourPrice, nYourTickets, arrSkipedAreas, purchaseTime = input_information()
+    TARGET_URL, USERNAME, PASSWORD, nYourPrice, nYourTickets, arrSkipedAreas, purchaseTime = input_information()
 
     driver = webdriver.Chrome()
     driver.set_page_load_timeout(60)
 
     if not DEBUG_MODE:
-        driver.get(url)
+        driver.get(URL)
     else:
-        driver.get(target_url)
+        driver.get(TARGET_URL)
 
     # Google Login tixCraft.
     if not DEBUG_MODE:
@@ -239,9 +239,9 @@ if __name__ == '__main__':
     driver.maximize_window()
     time.sleep(1)
 
-    # Located to "target_url" and click "Immediately Purchase".
+    # Located to "TARGET_URL" and click "Immediately Purchase".
     if not DEBUG_MODE:
-        driver.get(target_url)
+        driver.get(TARGET_URL)
     time.sleep(1)
 
     wait_to_deadline(driver, purchaseTime)
