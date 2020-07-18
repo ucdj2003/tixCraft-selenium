@@ -75,7 +75,7 @@ def input_information():
     # purchaseTime = "2020 07 11 11 00 00"
     while True:
         try:
-            purchaseTime = input("輸入此演唱會的搶票日期，範例格式為 {Y(2020) m(01-12) d(0-31) H(0-23) M(00-59) S(00-59)} : ")
+            purchaseTime = input("輸入此演唱會的搶票日期，範例格式為 {Y(2020) m(01-12) d(1-31) H(0-23) M(00-59) S(00-59)} : ")
             time.strptime(purchaseTime, "%Y %m %d %H %M %S")
             break
         except ValueError:
@@ -127,6 +127,8 @@ def click_order(driver):
 
 def wait_to_verfication(driver):
     # If enter the verfication page (for some Japanese/Korean performance), then should be wait 200 sec.
+    js = "if (location.pathname.match('/ticket/verify/')) { document.getElementById('checkCode').focus(); }"
+    driver.execute_script(js)
     WebDriverWait(driver, 200).until(
         expected_conditions.presence_of_element_located(
             (By.XPATH, "//ul[@class='area-list']"))
