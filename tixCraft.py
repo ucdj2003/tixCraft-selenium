@@ -126,7 +126,7 @@ def click_order(driver):
     )
     driver.find_element_by_xpath("//input[@class='btn btn-next']").click()
 
-def wait_for_verfication(driver):
+def wait_for_verification(driver):
     # If enter the verfication page (for some Japanese/Korean performance), then should be wait 200 sec.
     js = "if (location.pathname.match('/ticket/verify/')) { document.getElementById('checkCode').focus(); }"
     driver.execute_script(js)
@@ -243,7 +243,7 @@ if __name__ == '__main__':
     click_order(driver)
     time.sleep(1)
 
-    wait_for_verfication(driver)
+    wait_for_verification(driver)
     time.sleep(1)
 
     # Select zone to captcha input anchor.
