@@ -13,11 +13,11 @@ The program automated by this step:
 
 ## Usage
 ```bash
-python3 tixCraft.py
+python3 main.py
 ```
 
 ## Program input information by below rules
-1. 輸入你想要搶票的演唱會網址，格式為「.../activity/game/...」
+1. 輸入你想要搶票的演唱會網址，格式為「https://tixcraft.com/activity/...」
 2. 輸入你的Google帳號
 3. 輸入你的Google帳號
 4. 輸入你想搶的票價
