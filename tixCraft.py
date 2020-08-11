@@ -7,6 +7,7 @@ import requests
 import re
 import math
 import random
+import getpass
 from bs4 import BeautifulSoup
 
 class tixCraftSelenium(object):
@@ -41,7 +42,7 @@ class tixCraftSelenium(object):
                 print("請重新輸入你的Google帳號(輸入不得為空)")
                 continue
         while True:
-            self.PASSWORD = input("輸入你的Google密碼: ")
+            self.PASSWORD = getpass.getpass(prompt="輸入你的Google密碼: ")
             if self.PASSWORD:
                 break
             else:
