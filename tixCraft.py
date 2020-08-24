@@ -108,6 +108,7 @@ class tixCraftSelenium(object):
 
 
     def waiting_for_deadline(self, driver, purchaseTime):
+        # Wating for the concert date and time before the concert starts.
         deadline = time.strptime(purchaseTime, "%Y %m %d %H %M %S")
         mkt_deadline = time.mktime(deadline)
         waiting_time = math.ceil(mkt_deadline - time.time())

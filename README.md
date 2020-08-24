@@ -19,7 +19,7 @@ python3 main.py
 ## Program input information by below rules
 1. 輸入你想要搶票的演唱會網址，格式為「https://tixcraft.com/activity/...」
 2. 輸入你的Google帳號
-3. 輸入你的Google帳號
+3. 輸入你的Google密碼
 4. 輸入你想搶的票價
 5. 輸入你想搶的張數
 6. 輸入你不想搶的區域 (optional)
